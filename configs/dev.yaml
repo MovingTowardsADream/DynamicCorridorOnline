@@ -3,6 +3,7 @@ app:
   version: "v1.0.0"
   countWorkers: 24
   timeout: 5s
+  tokenTLL: 1h
 
 http:
   port: 8080
@@ -29,4 +30,5 @@ messaging:
     timeout: 2s
 
 logger:
-  logLevel: "prod"
+  logLevel: "dev"
+  logPath: "./logs/dev/dev.log"

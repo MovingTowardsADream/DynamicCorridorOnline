@@ -9,15 +9,15 @@ type PasswordHash interface {
 	Hash(password string) string
 }
 
-type SHA1Hasher struct {
+type SHA1Hash struct {
 	salt string
 }
 
-func NewSHA1Hasher(salt string) *SHA1Hasher {
-	return &SHA1Hasher{salt: salt}
+func NewSHA1Hash(salt string) *SHA1Hash {
+	return &SHA1Hash{salt: salt}
 }
 
-func (h *SHA1Hasher) Hash(password string) string {
+func (h *SHA1Hash) Hash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))
 

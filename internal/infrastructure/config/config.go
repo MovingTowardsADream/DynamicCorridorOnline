@@ -30,6 +30,7 @@ type (
 		Version      string        `env:"APP_VERSION"         env-default:"1.0.0"         yaml:"version"`
 		CountWorkers int           `env:"APP_WORKERS"         env-default:"24"            yaml:"countWorkers"`
 		Timeout      time.Duration `env:"APP_TIMEOUT"         env-default:"5s"           yaml:"timeout"`
+		TokenTLL     time.Duration `env:"APP_TOKEN_TLL"         env-default:"1h"           yaml:"tokenTLL"`
 	}
 
 	HTTP struct {
@@ -73,13 +74,14 @@ type (
 
 	Security struct {
 		PasswordSalt string `env:"PASSWORD_SALT"`
+		SigningKey   string `env:"SIGNING_KEY"`
 	}
 )
 
 func MustLoad() *Config {
 	configPath := fetchConfigPath()
 	if configPath == "" {
-		panic("config path is empty")
+		panic("configs path is empty")
 	}
 
 	return MustLoadPath(configPath, _defaultEnvPath)
@@ -87,7 +89,7 @@ func MustLoad() *Config {
 
 func MustLoadPath(configPath, envPath string) *Config {
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		panic("config file does not exist: " + configPath)
+		panic("configs file does not exist: " + configPath)
 	}
 
 	var cfg Config
@@ -95,7 +97,7 @@ func MustLoadPath(configPath, envPath string) *Config {
 	_ = godotenv.Load(envPath)
 
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
-		panic("cannot read config: " + err.Error())
+		panic("cannot read configs: " + err.Error())
 	}
 
 	return &cfg
@@ -104,7 +106,7 @@ func MustLoadPath(configPath, envPath string) *Config {
 func fetchConfigPath() string {
 	var res string
 
-	flag.StringVar(&res, "config", _defaultConfigPath, "path to config file")
+	flag.StringVar(&res, "configs", _defaultConfigPath, "path to configs file")
 	flag.Parse()
 
 	if res == "" {
