@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"log/slog"
 	"net/http"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -10,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	authroutes "TicTacToe/internal/infrastructure/controller/http/v1/auth"
+	"TicTacToe/internal/interfaces/middleware"
 )
 
-func NewRouter(log *slog.Logger, handler *gin.Engine, auth authroutes.EditInfo) {
+func NewRouter(handler *gin.Engine, user EditInfo, stat StatistInfo) {
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
 
@@ -27,13 +26,16 @@ func NewRouter(log *slog.Logger, handler *gin.Engine, auth authroutes.EditInfo) 
 	// Prometheus metrics
 	handler.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
+	// Middleware
+	mw := middleware.New(user)
+
 	// Routers
-	authHandler := handler.Group("/auth")
+	authHandler := handler.Group("/user")
 	{
-		authroutes.NewAuthRoutes(log, authHandler, auth)
+		NewAuthRoutes(authHandler, user)
 	}
-	//h := handler.Group("/api/v1")
-	//{
-	//
-	//}
+	apiHandler := handler.Group("/api/v1", mw.UserIdentity())
+	{
+		NewStatistRoutes(apiHandler, stat)
+	}
 }

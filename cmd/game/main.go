@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
+	"TicTacToe/internal/application/app"
 	"TicTacToe/internal/infrastructure/config"
 	"TicTacToe/pkg/logger"
 )
@@ -25,7 +28,28 @@ func main() {
 		}
 	}()
 
-	fmt.Println(cfg)
+	application := app.New(ctx, log, cfg)
 
-	_ = ctx
+	go func() {
+		if errServ := application.HTTPServer.Run(); errServ != nil {
+			log.Error("server was shut down due to an error: ", log.Err(errServ))
+		}
+	}()
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
+
+	select {
+	case <-stop:
+	}
+
+	log.Info("starting graceful shutdown")
+
+	if err := application.HTTPServer.Shutdown(); err != nil {
+		log.Error("server was shut down with error: ", log.Err(err))
+	}
+
+	application.Storage.Close()
+
+	log.Info("gracefully stopped")
 }

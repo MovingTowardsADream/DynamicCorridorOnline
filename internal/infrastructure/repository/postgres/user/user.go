@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	usersTable = "user"
+	usersTable = "users"
 )
 
 type UsersRepo struct {

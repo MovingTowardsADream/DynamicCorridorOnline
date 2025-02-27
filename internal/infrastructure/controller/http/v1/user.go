@@ -1,4 +1,4 @@
-package auth
+package v1
 
 import (
 	"context"
@@ -16,6 +16,7 @@ import (
 type EditInfo interface {
 	CreateUser(ctx context.Context, userData *dto.UserData) (*models.User, error)
 	GenerateToken(ctx context.Context, userData *dto.UserData) (*dto.AuthToken, error)
+	ParseToken(token string) (string, error)
 }
 
 type AuthsRoutes struct {
@@ -25,7 +26,7 @@ type AuthsRoutes struct {
 func NewAuthRoutes(handler *gin.RouterGroup, userInfo EditInfo) {
 	r := &AuthsRoutes{userInfo}
 
-	h := handler.Group("/auth")
+	h := handler.Group("/user")
 	{
 		h.POST("sign-up", r.signUp)
 		h.POST("sign-in", r.signIn)

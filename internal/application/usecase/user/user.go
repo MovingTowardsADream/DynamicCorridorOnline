@@ -1,7 +1,8 @@
-package auth
+package user
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -102,4 +103,27 @@ func (e *UsersInfo) GenerateToken(ctx context.Context, userData *dto.UserData) (
 	}
 
 	return &dto.AuthToken{Token: tokenWithSignKey}, nil
+}
+
+func (e *UsersInfo) ParseToken(accessToken string) (string, error) {
+	const op = "UsersInfo - ParseToken"
+
+	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("%s - %w", op, usecaseerr.ErrParseJWTToken)
+		}
+
+		return []byte(e.signingKey), nil
+	})
+
+	if err != nil {
+		return "", fmt.Errorf("%s - %w", op, usecaseerr.ErrParseJWTToken)
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
+		return "", fmt.Errorf("%s - %w", op, usecaseerr.ErrParseJWTToken)
+	}
+
+	return claims.UserID, nil
 }

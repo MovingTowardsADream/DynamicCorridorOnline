@@ -115,6 +115,7 @@ func fetchConfigPath() string {
 
 	return res
 }
+
 func getMainConfigPath() string {
 	return fmt.Sprintf("%s/%s.yaml", os.Getenv("CONFIG_PATH"), os.Getenv("CONF_LEVEL"))
 }

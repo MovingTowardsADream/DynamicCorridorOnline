@@ -3,13 +3,19 @@ package app
 import (
 	"context"
 
+	"github.com/gin-gonic/gin"
+
+	statisticusecase "TicTacToe/internal/application/usecase/statistic"
 	userusecase "TicTacToe/internal/application/usecase/user"
 	"TicTacToe/internal/infrastructure/config"
 	httpserver "TicTacToe/internal/infrastructure/controller/http"
 	"TicTacToe/internal/infrastructure/repository/postgres"
+	statisticrepo "TicTacToe/internal/infrastructure/repository/postgres/statistic"
 	userrepo "TicTacToe/internal/infrastructure/repository/postgres/user"
 	"TicTacToe/pkg/hasher"
 	"TicTacToe/pkg/logger"
+
+	"TicTacToe/internal/infrastructure/controller/http/v1"
 )
 
 type App struct {
@@ -38,11 +44,17 @@ func New(ctx context.Context, log logger.Logger, cfg *config.Config) *App {
 
 	userRepo := userrepo.New(storage)
 	hash := hasher.NewSHA1Hash(cfg.Security.PasswordSalt)
-	userUseCase := userusecase.New(log, hash, userRepo, cfg.TokenTLL, cfg.Security.SigningKey)
+	authUseCase := userusecase.New(log, hash, userRepo, cfg.TokenTLL, cfg.Security.SigningKey)
 
-	return &App{}
-}
+	statisticRepo := statisticrepo.New(storage)
+	statisticUseCase := statisticusecase.New(log, statisticRepo)
 
-func (a *App) Run() {
+	handler := gin.New()
+	v1.NewRouter(handler, authUseCase, statisticUseCase)
+	httpServer := httpserver.New(log, handler, httpserver.WriteTimeout(cfg.HTTP.Timeout))
 
+	return &App{
+		HTTPServer: httpServer,
+		Storage:    storage,
+	}
 }

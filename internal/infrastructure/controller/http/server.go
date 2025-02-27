@@ -3,7 +3,6 @@ package http
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"net"
 	"net/http"
 	"time"
@@ -21,7 +20,7 @@ const (
 
 type Server struct {
 	httpServer *http.Server
-	log        *slog.Logger
+	log        logger.Logger
 
 	port            int
 	readTimeout     time.Duration
@@ -29,7 +28,7 @@ type Server struct {
 	shutdownTimeout time.Duration
 }
 
-func New(log *slog.Logger, handler http.Handler, opts ...Option) *Server {
+func New(log logger.Logger, handler http.Handler, opts ...Option) *Server {
 	s := &Server{
 		log:             log,
 		port:            _defaultAddr,
@@ -66,7 +65,7 @@ func (s *Server) Run() error {
 		return fmt.Errorf("%s: %w", op, err)
 	}
 
-	s.log.Info("gRPC server started", logger.AnyAttr("addr", l.Addr().String()))
+	s.log.Info("http server started", logger.AnyAttr("addr", l.Addr().String()))
 
 	if err := s.httpServer.Serve(l); err != nil {
 		return fmt.Errorf("%s: %w", op, err)
@@ -81,8 +80,7 @@ func (s *Server) Shutdown() error {
 
 	const op = "httpServer.Shutdown"
 
-	s.log.With(slog.String("op", op)).
-		Info("stopping http server", slog.String("port", s.httpServer.Addr))
+	s.log.Info("stopping http server", logger.AnyAttr("port", s.httpServer.Addr))
 
 	return fmt.Errorf("%s: %w", op, s.httpServer.Shutdown(ctx))
 }
