@@ -11,7 +11,7 @@ type UserDataHash struct {
 }
 
 type Identify struct {
-	ID int64 `json:"id"`
+	ID string `json:"id"`
 }
 
 type AuthToken struct {

@@ -2,17 +2,15 @@ package auth
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"TicTacToe/internal/domain/models"
+	httperr "TicTacToe/internal/infrastructure/controller/http/errors"
 	"TicTacToe/internal/interfaces/convert"
 	"TicTacToe/internal/interfaces/dto"
-
-	httperr "TicTacToe/internal/infrastructure/controller/http/errors"
 )
 
 type EditInfo interface {
@@ -22,11 +20,10 @@ type EditInfo interface {
 
 type AuthsRoutes struct {
 	userInfo EditInfo
-	log      *slog.Logger
 }
 
-func NewAuthRoutes(log *slog.Logger, handler *gin.RouterGroup, userInfo EditInfo) {
-	r := &AuthsRoutes{userInfo, log}
+func NewAuthRoutes(handler *gin.RouterGroup, userInfo EditInfo) {
+	r := &AuthsRoutes{userInfo}
 
 	h := handler.Group("/auth")
 	{

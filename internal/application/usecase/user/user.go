@@ -1,4 +1,4 @@
-package user
+package auth
 
 import (
 	"context"
@@ -62,7 +62,7 @@ func (e *UsersInfo) CreateUser(ctx context.Context, userData *dto.UserData) (*mo
 
 type tokenClaims struct {
 	jwt.StandardClaims
-	UserID int `json:"user_id"`
+	UserID string `json:"user_id"`
 }
 
 func (e *UsersInfo) GenerateToken(ctx context.Context, userData *dto.UserData) (*dto.AuthToken, error) {
@@ -90,7 +90,7 @@ func (e *UsersInfo) GenerateToken(ctx context.Context, userData *dto.UserData) (
 			ExpiresAt: time.Now().Add(e.tokenTLL).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
-		int(identify.ID),
+		identify.ID,
 	})
 
 	tokenWithSignKey, err := token.SignedString([]byte(e.signingKey))
@@ -102,24 +102,4 @@ func (e *UsersInfo) GenerateToken(ctx context.Context, userData *dto.UserData) (
 	}
 
 	return &dto.AuthToken{Token: tokenWithSignKey}, nil
-}
-
-func (e *UsersInfo) ParseToken(accessToken string) (int, error) {
-	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, usecaseerr.ErrParseJWTToken
-		}
-
-		return []byte(e.signingKey), nil
-	})
-	if err != nil {
-		return 0, err
-	}
-
-	claims, ok := token.Claims.(*tokenClaims)
-	if !ok {
-		return 0, usecaseerr.ErrParseJWTToken
-	}
-
-	return claims.UserID, nil
 }
