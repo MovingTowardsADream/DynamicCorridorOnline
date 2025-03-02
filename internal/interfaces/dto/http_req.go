@@ -17,3 +17,7 @@ type GetExpByUserIdParams struct {
 type EditExpByUserIdParams struct {
 	ID string `json:"id"`
 }
+
+type AddExpReq struct {
+	ExpValue int `json:"exp_value"`
+}

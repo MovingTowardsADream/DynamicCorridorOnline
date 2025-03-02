@@ -35,7 +35,7 @@ func (r *StatisticsRepo) GetExpByUserId(ctx context.Context, identify *dto.Ident
 
 	var userExp dto.UserExp
 
-	err := r.storage.Pool.QueryRow(ctx, sql, args).Scan(
+	err := r.storage.Pool.QueryRow(ctx, sql, args...).Scan(
 		&userExp.ID,
 		&userExp.Username,
 		&userExp.ExpValue,
@@ -55,7 +55,7 @@ func (r *StatisticsRepo) EditExpByUserId(ctx context.Context, updater *dto.Updat
 		Where("user_id = ?", updater.ID).
 		ToSql()
 
-	row, err := r.storage.Pool.Exec(ctx, sql, args)
+	row, err := r.storage.Pool.Exec(ctx, sql, args...)
 
 	if err != nil {
 		return fmt.Errorf("StatisticsRepo.EditExpByUserId - r.storage.Pool.QueryRow: %w", mapping.MapErrors(err))
@@ -77,7 +77,7 @@ func (r *StatisticsRepo) DeltaExpByUserId(ctx context.Context, adder *dto.AddExp
 		Where("user_id = ?", adder.ID).
 		ToSql()
 
-	row, err := r.storage.Pool.Exec(ctx, sql, args)
+	row, err := r.storage.Pool.Exec(ctx, sql, args...)
 
 	if err != nil {
 		return fmt.Errorf("%s - r.storage.Pool.QueryRow: %w", op, mapping.MapErrors(err))
@@ -99,7 +99,7 @@ func (r *StatisticsRepo) GetLeaderBoard(ctx context.Context, limitBoard *dto.Lim
 		Limit(limitBoard.Limit).
 		ToSql()
 
-	rows, err := r.storage.Pool.Query(ctx, sql, args)
+	rows, err := r.storage.Pool.Query(ctx, sql, args...)
 
 	if err != nil {
 		return nil, fmt.Errorf("StatisticsRepo.EditExpByUserId - r.storage.Pool.QueryRow: %w", mapping.MapErrors(err))

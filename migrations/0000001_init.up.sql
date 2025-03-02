@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS statistic (
     id BIGSERIAL PRIMARY KEY,
-    exp_value INT NOT NULL,
+    exp_value INT NOT NULL DEFAULT 0,
     user_id TEXT NOT NULL UNIQUE,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

@@ -1,0 +1,56 @@
+.navbar {
+    position: fixed; /* Фиксированная позиция */
+    top: 0; /* Прижимаем к верхнему краю */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between; /* Элементы по краям */
+    align-items: center; /* Выравниваем по вертикали */
+    padding: 0 20px; /* Отступы слева и справа */
+    background-color: #2D3142; /* Цвет фона */
+    color: #fff; /* Цвет текста */
+    height: 70px; /* Фиксированная высота */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для эффекта "линии" */
+    z-index: 1000; /* Убедимся, что Navbar поверх других элементов */
+}
+
+.navbar > div {
+    display: flex;
+    gap: 20px; /* Расстояние между кнопками */
+}
+
+.logoText {
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 24px;
+    color: #EF8354;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2D3142; /* Цвет текста */
+    background-color: #BFC0C0; /* Цвет фона */
+    border: 2px solid #2D3142; /* Граница */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+    background-color: #EF8354; /* Оранжевый цвет при наведении */
+    color: #fff; /* Белый текст */
+    border-color: #EF8354; /* Граница оранжевая */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
+}
+
+.button:active {
+    background-color: #2D3142; /* Темный цвет при нажатии */
+    color: #fff; /* Белый текст */
+    border-color: #2D3142; /* Граница темная */
+    transform: scale(0.95); /* Уменьшение размера */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшенная тень */
+}

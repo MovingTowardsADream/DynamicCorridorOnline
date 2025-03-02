@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+//go:generate mockgen -source=hasher.go -destination=./mocks/hasher_mocks.go -package=mocks
 type PasswordHash interface {
 	Hash(password string) string
 }

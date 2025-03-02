@@ -32,10 +32,11 @@ func NewRouter(handler *gin.Engine, user EditInfo, stat StatistInfo) {
 	// Routers
 	authHandler := handler.Group("/user")
 	{
-		NewAuthRoutes(authHandler, user)
+		newAuthRoutes(authHandler, user)
 	}
 	apiHandler := handler.Group("/api/v1", mw.UserIdentity())
 	{
-		NewStatistRoutes(apiHandler, stat)
+		newStatistRoutes(apiHandler, stat)
+		newGameRoutes(apiHandler)
 	}
 }

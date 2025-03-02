@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -8,7 +9,7 @@ import (
 )
 
 const (
-	userIDCtx           = "userID"
+	userIDCtx           = "UserID"
 	authorizationHeader = "Authorization"
 )
 
@@ -43,20 +44,26 @@ func (h *AuthMiddleware) UserIdentity() gin.HandlerFunc {
 func bearerToken(c *gin.Context) (string, bool) {
 	const prefix = "Bearer "
 
-	header, ok := c.Get(authorizationHeader)
-	if header == "" || !ok {
+	header := c.GetHeader(authorizationHeader)
+
+	if header == "" {
 		return "", false
 	}
 
-	headerStr, ok := header.(string)
-
-	if !ok {
-		return "", false
-	}
-
-	if len(headerStr) > len(prefix) && strings.EqualFold(headerStr[:len(prefix)], prefix) {
-		return headerStr[len(prefix):], true
+	if len(header) > len(prefix) && strings.EqualFold(header[:len(prefix)], prefix) {
+		return header[len(prefix):], true
 	}
 
 	return "", false
+}
+
+var ErrUserIDEmpty = errors.New("user id empty")
+
+func GetUserID(c *gin.Context) (string, error) {
+	id, ok := c.Get(userIDCtx)
+	if !ok {
+		return "", ErrUserIDEmpty
+	}
+
+	return id.(string), nil
 }

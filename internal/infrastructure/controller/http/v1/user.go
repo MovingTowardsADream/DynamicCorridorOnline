@@ -3,7 +3,6 @@ package v1
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -23,10 +22,10 @@ type AuthsRoutes struct {
 	userInfo EditInfo
 }
 
-func NewAuthRoutes(handler *gin.RouterGroup, userInfo EditInfo) {
+func newAuthRoutes(handler *gin.RouterGroup, userInfo EditInfo) {
 	r := &AuthsRoutes{userInfo}
 
-	h := handler.Group("/user")
+	h := handler.Group("/auth")
 	{
 		h.POST("sign-up", r.signUp)
 		h.POST("sign-in", r.signIn)
@@ -43,20 +42,14 @@ func (u *AuthsRoutes) signUp(c *gin.Context) {
 
 	userData := convert.SignUpParamsToUserData(&input)
 
-	user, err := u.userInfo.CreateUser(c, userData)
+	user, err := u.userInfo.CreateUser(c.Request.Context(), userData)
 
 	if err != nil {
 		c.JSON(httperr.MapErrors(err), map[string]interface{}{})
 		return
 	}
 
-	type respond struct {
-		ID        int64
-		Username  string
-		CreatedAt time.Time
-	}
-
-	c.JSON(http.StatusOK, respond{
+	c.JSON(http.StatusOK, dto.SignUpResp{
 		ID:        user.ID,
 		Username:  user.Username,
 		CreatedAt: user.CreatedAt,
@@ -73,18 +66,14 @@ func (u *AuthsRoutes) signIn(c *gin.Context) {
 
 	userData := convert.SignInParamsToUserData(&input)
 
-	auth, err := u.userInfo.GenerateToken(c, userData)
+	auth, err := u.userInfo.GenerateToken(c.Request.Context(), userData)
 
 	if err != nil {
 		c.JSON(httperr.MapErrors(err), map[string]interface{}{})
 		return
 	}
 
-	type respond struct {
-		token string
-	}
-
-	c.JSON(http.StatusOK, respond{
-		token: auth.Token,
+	c.JSON(http.StatusOK, dto.SignInResp{
+		Token: auth.Token,
 	})
 }

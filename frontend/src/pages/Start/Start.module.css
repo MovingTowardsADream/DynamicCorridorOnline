@@ -1,0 +1,17 @@
+.title {
+    font-size: 3em;
+    text-align: center;
+    padding: 70px 0 0 0;
+    color: #EF8354;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.cubeSpan {
+    border: 2px solid #4F5D75;
+    padding: 10px;
+}
+
+.text {
+    color: #BFC0C0;
+}
