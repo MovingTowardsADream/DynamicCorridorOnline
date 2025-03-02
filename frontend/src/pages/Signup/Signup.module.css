@@ -1,0 +1,79 @@
+.container {
+    background-color: #2D3142;
+    border: 2px solid #2D3142;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titleText {
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 24px;
+    color: #EF8354;
+    margin-bottom: 35px;
+}
+
+.inputContainer {
+    margin-bottom: 15px;
+}
+
+.inputContainer input {
+    width: 97%; /* Занимает всю ширину родительского контейнера */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Учитывает padding и border в общей ширине */
+}
+
+.button {
+    width: 97%;
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2D3142; /* Цвет текста */
+    background-color: #BFC0C0; /* Цвет фона */
+    border: 2px solid #2D3142; /* Граница */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+    background-color: #EF8354; /* Оранжевый цвет при наведении */
+    color: #fff; /* Белый текст */
+    border-color: #EF8354; /* Граница оранжевая */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
+}
+
+.button:active {
+    background-color: #2D3142; /* Темный цвет при нажатии */
+    color: #fff; /* Белый текст */
+    border-color: #2D3142; /* Граница темная */
+    transform: scale(0.95); /* Уменьшение размера */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Уменьшенная тень */
+}
+
+.rememberMeContainer {
+    display: flex;
+    align-items: center; /* Выравнивание по центру */
+}
+
+.rememberMeContainer label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #BFC0C0;
+    cursor: pointer;
+}
+
+.rememberMeContainer input {
+    margin-right: 8px; /* Отступ между чекбоксом и текстом */
+    cursor: pointer;
+}

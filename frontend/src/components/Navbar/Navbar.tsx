@@ -5,6 +5,11 @@ import {useNavigate} from "react-router-dom";
 function Navbar() {
     const navigate = useNavigate();
 
+    const handleStart = () => {
+        console.log("navigate on /")
+        navigate('/')
+    }
+
     const handleSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         console.log("navigate on /sign-up")
@@ -20,7 +25,7 @@ function Navbar() {
     return (
         <>
             <nav className={style.navbar}>
-                <div>
+                <div onClick={handleStart} style={{ cursor: 'pointer' }}>
                     <h1 className={style.logoText}>Dynamic Corridor</h1>
                 </div>
                 <div>

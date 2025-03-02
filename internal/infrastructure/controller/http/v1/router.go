@@ -9,10 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"TicTacToe/internal/infrastructure/config"
 	"TicTacToe/internal/interfaces/middleware"
 )
 
-func NewRouter(handler *gin.Engine, user EditInfo, stat StatistInfo) {
+func NewRouter(cfg *config.Config, handler *gin.Engine, user EditInfo, stat StatistInfo) {
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
 
@@ -27,7 +28,9 @@ func NewRouter(handler *gin.Engine, user EditInfo, stat StatistInfo) {
 	handler.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	// Middleware
-	mw := middleware.New(user)
+	mw := middleware.New(cfg.Frontend.Host, user)
+
+	handler.Use(mw.CORSMiddleware.CORSMiddleware())
 
 	// Routers
 	authHandler := handler.Group("/user")

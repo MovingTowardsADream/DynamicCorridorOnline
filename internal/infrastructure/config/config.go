@@ -21,6 +21,7 @@ type (
 		HTTP      `yaml:"http"`
 		Storage   `yaml:"storage"`
 		Messaging `yaml:"messaging"`
+		Frontend  `yaml:"frontend"`
 		Log       `yaml:"logger"`
 		Security  `yaml:"security"`
 	}
@@ -65,6 +66,10 @@ type (
 		Client MessagingClient `yaml:"client"`
 		URL    string          `env:"RMQ_URL"        env-required:"true"      yaml:"url"`
 		Topics []string        `env:"RMQ_TOPICS"     env-required:"true"      yaml:"topics"`
+	}
+
+	Frontend struct {
+		Host string `yaml:"host"`
 	}
 
 	Log struct {

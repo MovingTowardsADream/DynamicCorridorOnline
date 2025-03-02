@@ -50,7 +50,7 @@ func New(ctx context.Context, log logger.Logger, cfg *config.Config) *App {
 	statisticUseCase := statisticusecase.New(log, statisticRepo)
 
 	handler := gin.New()
-	v1.NewRouter(handler, authUseCase, statisticUseCase)
+	v1.NewRouter(cfg, handler, authUseCase, statisticUseCase)
 	httpServer := httpserver.New(log, handler, httpserver.WriteTimeout(cfg.HTTP.Timeout))
 
 	return &App{

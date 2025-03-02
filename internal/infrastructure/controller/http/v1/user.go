@@ -27,8 +27,8 @@ func newAuthRoutes(handler *gin.RouterGroup, userInfo EditInfo) {
 
 	h := handler.Group("/auth")
 	{
-		h.POST("sign-up", r.signUp)
-		h.POST("sign-in", r.signIn)
+		h.POST("/sign-up", r.signUp)
+		h.POST("/sign-in", r.signIn)
 	}
 }
 

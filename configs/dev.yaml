@@ -29,6 +29,9 @@ messaging:
     attempts: 10
     timeout: 2s
 
+frontend:
+  host: "http://localhost:5173"
+
 logger:
   logLevel: "dev"
   logPath: "./logs/dev/dev.log"
