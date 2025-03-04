@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, message}) => {
         if (isOpen) {
             const timer = setTimeout(() => {
                 onClose();
-            }, 3000); // Закрыть через 3 секунды
+            }, 3000); {/* closed after 3 seconds */}
             return () => clearTimeout(timer);
         }
     }, [isOpen, onClose]);
@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, message}) => {
         <div className={style.modalOverlay}>
             <div className={style.modalContent}>
                 <button className={style.closeButton} onClick={onClose}>
-                    <FaTimes color="#EF8354" size={16} /> {/* Иконка крестика */}
+                    <FaTimes color="#EF8354" size={16} /> {/* cross icon */}
                 </button>
                 <p className={style.errorText}>{message}</p>
             </div>

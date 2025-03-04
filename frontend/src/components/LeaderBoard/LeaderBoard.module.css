@@ -1,0 +1,29 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #2D3142;
+    font-weight: bold;
+}
+
+.row {
+    border-bottom: 1px solid #2D3142;
+}
+
+.cell {
+    padding: 12px;
+    text-align: left;
+    color: #EF8354;
+}
+
+.row:hover {
+    background-color: #2D3142;
+}
+
+.row:nth-child(even) {
+    background-color: #2D3142;
+}

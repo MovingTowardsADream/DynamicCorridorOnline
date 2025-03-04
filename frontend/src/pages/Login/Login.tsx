@@ -1,22 +1,29 @@
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, useState, useContext} from 'react';
 import Navbar from "../../components/Navbar/Navbar.tsx";
 import style from "./Login.module.css"
 import * as React from "react";
 import ModalWindow from "../../components/ModalWindow/ModalWindow.tsx";
+import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 const defaultError: string = "something went wrong"
 
 function Login() {
+    const navigate = useNavigate();
     const [login, setLogin] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [rememberMe, setRememberMe] = useState(false);
-    const [error, setError] = useState("")
+    const [error, setError] = useState("");
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [auth, setAuth] = useContext(AuthContext);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log("try login");
-        submitLogin();
+        submitLogin().then(() => console.log("error submit login"));
     }
 
     const submitLogin = async () => {
@@ -43,7 +50,14 @@ function Login() {
             errLogic(errData)
             return
         }
-        console.log(dataLogin)
+
+        console.log("success login")
+
+        const authToken: string = dataLogin["token"]
+        setAuth(authToken)
+        sessionStorage.setItem("auth", authToken)
+
+        navigate("/lobby")
     }
 
     const errLogic = (err: string) => {
@@ -92,9 +106,9 @@ function Login() {
             </div>
             {error !== "" &&
                 <ModalWindow
-                isOpen={isModalOpen}
-                onClose={() => {setIsModalOpen(false);}}
-                message={error}
+                    isOpen={isModalOpen}
+                    onClose={() => {setIsModalOpen(false);}}
+                    message={error}
                 />
             }
         </>
