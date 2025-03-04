@@ -57,7 +57,7 @@ function Login() {
         setAuth(authToken)
         sessionStorage.setItem("auth", authToken)
 
-        navigate("/lobby")
+        navigate("/")
     }
 
     const errLogic = (err: string) => {
